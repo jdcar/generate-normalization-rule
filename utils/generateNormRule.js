@@ -12,49 +12,48 @@ function generateNormRule(data) {
 
 // Generate normalization rule content
 
-  let normRule = `
-  rule "Delete FAST headings"
-  \npriority 2
-  \nwhen 
-  \n(true)
-  \nthen
-  \nremoveField "${lcshTag}" if (exists "${lcshTag}.{-,7}.${subfield}.${lcshHeading}*")
+  let normRule = 
+`rule "Delete FAST headings"
+priority 2
+when 
+(true)
+then
+removeField "${lcshTag}" if (exists "${lcshTag}.{-,7}.${subfield}.${lcshHeading}*")
+end
 
-  \nend
+rule "Flip from LCSH to NULA"
+priority 3
+when
+(true)
+then
+replaceContents "${lcshTag}.${subfield}.${lcshHeading}\\\\\\\\." with "${localHeading}." if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}\\\\\\\\.")
+replaceContents "${lcshTag}.${subfield}.${lcshHeading}" with "${localHeading}" if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}")
+changeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}\\\\\\\\.")
+changeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}")
+removeSubField "${lcshTag}.2" if (exists "${lcshTag}.{-,7}")
+addSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}\\\\\\\\.")
+addSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}")
+end
 
-  \nrule "Flip from LCSH to NULA"
-  \npriority 3
-  \nwhen
-  \n(true)
-  \nthen
-  \nreplaceContents "${lcshTag}.${subfield}.${lcshHeading}\\\\\\\\." with "${localHeading}." if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}\\\\\\\\.")
-  \nreplaceContents "${lcshTag}.${subfield}.${lcshHeading}" with "${localHeading}" if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}")
-  \nchangeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}\\\\\\\\.")
-  \nchangeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}")
-  \nremoveSubField "${lcshTag}.2" if (exists "${lcshTag}.{-,7}")
-  \naddSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}\\\\\\\\.")
-  \naddSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}")
-  \nend
-  \nrule "Add LCSH to local tags"
-  \npriority 4
-  \nwhen 
-  \n(exists "${lcshTag}.${subfield}.${lcshHeading}*")
-  \nthen 
-  \ncopyField "${lcshTag}" to "${localTag}" if (exists "${lcshTag}.${subfield}.${lcshHeading}*")
-  \nend
-  \nrule "add $2 lcsh to lcsh headings"
-  \npriority 5
-  \nwhen 
-  \n(true)
-  \nthen
-  \naddSubField "${lcshTag}.2.lcsh"  if (exists "${lcshTag}.{-,0}.${subfield}.${lcshHeading}\\\\\\\\.")
-  \naddSubField "${lcshTag}.2.lcsh"  if (exists "${lcshTag}.{-,0}.${subfield}.${lcshHeading}")
+rule "Add LCSH to local tags"
+priority 4
+when 
+(exists "${lcshTag}.${subfield}.${lcshHeading}*")
+then 
+copyField "${lcshTag}" to "${localTag}" if (exists "${lcshTag}.${subfield}.${lcshHeading}*")
+end
 
-  \nend
-  `
+rule "add $2 lcsh to lcsh headings"
+priority 5
+when 
+(true)
+then
+addSubField "${lcshTag}.2.lcsh"  if (exists "${lcshTag}.{-,0}.${subfield}.${lcshHeading}\\\\\\\\.")
+addSubField "${lcshTag}.2.lcsh"  if (exists "${lcshTag}.{-,0}.${subfield}.${lcshHeading}")
+end`
 
 // Create a readme file
-  fs.writeFile('generated-normalization-rule.md', normRule, (err) => {
+  fs.writeFile('generated-normalization-rule.txt', normRule, (err) => {
     if (err) {
       console.log("Error");
     }
