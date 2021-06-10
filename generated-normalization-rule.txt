@@ -1,10 +1,10 @@
 rule "Add LCSH to local tags"
 priority 4
 when 
-(exists "650.x.Legal status of slaves in free states*")
+(exists "650.a.Child slaves*")
 then 
-addSubField "650.2.lcsh" if (exists "650.{-,0}.x.Legal status of slaves in free states*")
-copyField "650" to "950" if (exists "650.x.Legal status of slaves in free states*")
+addSubField "650.2.lcsh" if (exists "650.{-,0}.a.Child slaves*")
+copyField "650" to "690" if (exists "650.a.Child slaves*")
 removeSubField "650.2" if (exists "650.{-,0}")
 
 end
@@ -14,13 +14,13 @@ priority 3
 when
 (true)
 then
-replaceContents "650.x.Legal status of slaves in free states\\." with "Legal status of enslaved persons in free states." if(exists "650.{*,0}.x.Legal status of slaves in free states\\.")
-replaceContents "650.x.Legal status of slaves in free states" with "Legal status of enslaved persons in free states" if(exists "650.{*,0}.x.Legal status of slaves in free states")
-changeSecondIndicator "650" to "7" if (exists "650.x.Legal status of enslaved persons in free states\\.")
-changeSecondIndicator "650" to "7" if (exists "650.x.Legal status of enslaved persons in free states")
-removeSubField "650.2.fast" if (exists "650.{-,7}")
-addSubField "650.2.local"  if (exists "650.{-,7}.x.Legal status of enslaved persons in free states\\.")
-addSubField "650.2.local"  if (exists "650.{-,7}.x.Legal status of enslaved persons in free states")
+replaceContents "650.a.Child slaves\\\\." with "Enslaved children." if(exists "650.{*,0}.a.Child slaves\\\\.")
+replaceContents "650.a.Child slaves" with "Enslaved children" if(exists "650.{*,0}.a.Child slaves")
+changeSecondIndicator "650" to "7" if (exists "650.a.Enslaved children\\\\.")
+changeSecondIndicator "650" to "7" if (exists "650.a.Enslaved children")
+
+addSubField "650.2.local"  if (exists "650.{-,7}.a.Enslaved children\\\\.")
+addSubField "650.2.local"  if (exists "650.{-,7}.a.Enslaved children")
 
 end
 
@@ -29,5 +29,5 @@ priority 2
 when 
 (true)
 then
-removeField "650" if (exists "650.{-,7}.x.Legal status of slaves in free states*")
+removeField "650" if (exists "650.{-,7}.a.Child slaves*")
 end

@@ -29,12 +29,12 @@ priority 3
 when
 (true)
 then
-replaceContents "${lcshTag}.${subfield}.${lcshHeading}\\\\." with "${localHeading}." if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}\\\\.")
+replaceContents "${lcshTag}.${subfield}.${lcshHeading}\\\\\\\\." with "${localHeading}." if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}\\\\\\\\.")
 replaceContents "${lcshTag}.${subfield}.${lcshHeading}" with "${localHeading}" if(exists "${lcshTag}.{*,0}.${subfield}.${lcshHeading}")
-changeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}\\\\.")
+changeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}\\\\\\\\.")
 changeSecondIndicator "${lcshTag}" to "7" if (exists "${lcshTag}.${subfield}.${localHeading}")
-removeSubField "${lcshTag}.2.fast" if (exists "${lcshTag}.{-,7}")
-addSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}\\\\.")
+
+addSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}\\\\\\\\.")
 addSubField "${lcshTag}.2.${vocabCode}"  if (exists "${lcshTag}.{-,7}.${subfield}.${localHeading}")
 
 end
