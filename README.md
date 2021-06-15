@@ -27,10 +27,10 @@ The normalization rule will:
 4. Changes the second indicator to 7
 5. Adds $2 for subject vocabulary of new term
 4. Deletes the original FAST heading (there will be a copy of the FAST heading in the local field)
+5. Adds a note in the 949. The final rule, "Add note," can be deleted for anyone outside of Northwestern.
 
 Recommend you test any normalization rule in your Alma sandbox.
 ## License
 MIT. Copyright (c) 2021 Jamie Carlstone
 ## Questions
 * https://github.com/jdcar
-* Email: 
